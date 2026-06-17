@@ -44,11 +44,15 @@
 
   <!-- Activities and Applications should inherit from one of the themes above. -->
   <style name="Dialer.ThemeBase">
+    <item name="switchStyle">@style/Widget.AppCompat.CompoundButton.Switch</item>
+    <item name="android:switchStyle">@style/Widget.AppCompat.CompoundButton.Switch</item>
     <item name="android:forceDarkAllowed">true</item>
     <!-- These values should be used to color all backgrounds. -->
     <item name="android:colorBackground">@color/dialer_background_color</item>
     <item name="android:colorBackgroundFloating">@color/dialer_background_floating</item>
     <item name="colorBackgroundSearchBar">@color/dialer_search_bar_color</item>
+    <item name="colorControlActivated">?android:attr/colorAccent</item>
+    <item name="colorControlNormal">?android:attr/textColorSecondary</item>
 
     <!-- These values should be used to set text color. -->
     <item name="android:textColorPrimary">@color/dialer_primary_text_color</item>
@@ -93,9 +97,27 @@
     <item name="background">?android:attr/colorPrimary</item>
   </style>
   <style name="DialerActionBarBaseTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar" />
+  
+  <!-- Switch to Material v14 base for preferences -->
+  <style name="Dialer.Settings.PreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+    <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    
+    <item name="preferenceStyle">@style/Dialer.Preference.NoIndent</item>
+    <item name="switchPreferenceCompatStyle">@style/Dialer.SwitchPreferenceCompat.NoIndent</item>
+    <item name="checkBoxPreferenceStyle">@style/Dialer.CheckBoxPreference.NoIndent</item>
+  </style>
+  
+  <!-- Disable empty space reserved for icons  -->
+  <style name="Dialer.Preference.NoIndent" parent="@style/Preference.Material">
+    <item name="iconSpaceReserved">false</item>
+  </style>
 
-  <style name="Dialer.Settings.PreferenceTheme" parent="@style/PreferenceThemeOverlay">
-    <item name="switchPreferenceCompatStyle">@style/Dialer.SwitchPreferenceCompat</item>
+  <style name="Dialer.SwitchPreferenceCompat.NoIndent" parent="@style/Preference.SwitchPreferenceCompat.Material">
+    <item name="iconSpaceReserved">false</item>
+  </style>
+
+  <style name="Dialer.CheckBoxPreference.NoIndent" parent="@style/Preference.CheckBoxPreference.Material">
+    <item name="iconSpaceReserved">false</item>
   </style>
 
 

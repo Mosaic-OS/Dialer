@@ -516,4 +516,18 @@
 
   <!-- Label under the name of a spam number in the call log. [CHAR LIMIT=15] -->
   <string name="spam_number_call_log_label">Spam</string>
+
+  <!-- For callrecord consent dialog in Sound & vibrations settings -->
+  <string name="recording_consent_summary">You are responsible for using call recording. Tap to view details.</string>
+  <string name="recording_consent">
+      By using call recording, you agree to the following:
+      MosaicOS is not responsible for the use of this feature.
+      The application does not collect, store, or transmit voice recordings or personal data to MosaicOS.
+      Voice recordings made during phone calls and any personal data associated with them are saved and stored exclusively on the user\'s device.
+      They are accessible only to the user, and it is the user\'s responsibility to protect them from third parties.
+      The application only provides a tool for data processing on the user\'s device; the user is considered the data controller for the recorded data.
+      The user has full rights over the audio recordings and may save, delete, or modify them.
+      It is the user\'s responsibility to comply with all relevant laws (e.g. GDPR), including obtaining the other party\'s consent if required.
+  </string>
+  <string name="dialog_ok">OK</string>
 </resources>

@@ -117,4 +117,16 @@
   <string name="call_log_action_remove_spam">Nem spam</string>
   <string name="call_log_action_unblock_number">Szám tiltásának feloldása</string>
   <string name="spam_number_call_log_label">Spam</string>
+  <string name="recording_consent_summary">A hívásrögzítés használatáért Ön a felelős. Koppintson a részletekért.</string>
+  <string name="recording_consent">
+        A hívásrögzítés használatával Ön elfogadja az alábbiakat:
+        A funkció használatáért a MosaicOS felelősséggel nem tartozik.
+        Az alkalmazás nem gyűjt, nem tárol és nem továbbít hangfelvételeket és személyes adatokat a MosaicOS részére.
+        A telefonhívások rögzítése során keletkező hangfelvételek és az azokkal kapcsolatba hozható személyes adatok kizárólag
+        a felhasználó készülékén kerülnek elmentésre és tárolásra, azokhoz kizárólag a felhasználó fér hozzá, azok harmadik féltől történő megóvása a felhasználó feladata.
+        Az alkalmazás a felhasználó készülékén történő adatkezeléshez csak eszközt biztosít, így a felhasználó minősül adatkezelőnek a rögzített adatok tekintetében.
+        Ennek megfelelően a felhasználó teljeskörűen jogosult rendelkezni a hanganyagok felett, azokat mentheti, törölheti, módosíthatja.
+        A felhasználó felelőssége, hogy a hívásrögzítés során minden vonatkozó jogszabályt betartson (ld. GDPR, hazai és külföldi adatkezelési jogszabályok)
+        ideértve a másik fél hozzájárulásának beszerzését is, ha az adott országban erre jogszabály kötelezi.
+  </string>
 </resources>

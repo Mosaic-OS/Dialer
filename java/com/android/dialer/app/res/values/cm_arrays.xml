@@ -25,5 +25,20 @@
         <item>"0"</item>
         <item>"1"</item>
     </string-array>
+    
+    <string-array name="call_recording_source_entries" translatable="false">
+        <item>@string/source_mic</item>
+        <item>@string/source_voice_uplink</item>
+        <item>@string/source_voice_downlink</item>
+        <item>@string/source_voice_call</item>
+    </string-array>
+
+    <string-array name="call_recording_source_values" translatable="false">
+        <item>"1"</item>
+        <item>"2"</item>
+        <item>"3"</item>
+        <item>"4"</item>
+    </string-array>
+
 
 </resources>

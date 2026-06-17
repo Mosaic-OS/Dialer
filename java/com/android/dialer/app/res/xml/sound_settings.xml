@@ -90,6 +90,23 @@
             android:summary="%s"
             android:title="@string/call_recording_format"
             app:iconSpaceReserved="false" />
+            
+        <ListPreference
+            android:defaultValue="4"
+            android:entries="@array/call_recording_source_entries"
+            android:entryValues="@array/call_recording_source_values"
+            android:key="@string/call_recording_source_key"
+            android:summary="%s"
+            android:title="@string/call_recording_source"
+            app:iconSpaceReserved="false" />
+            
+        <Preference
+            android:key="call_recording_warning"
+            android:icon="@drawable/info"
+            android:summary="@string/recording_consent_summary"
+            android:selectable="true"
+            android:persistent="false" />
+
 
     </PreferenceCategory>
 

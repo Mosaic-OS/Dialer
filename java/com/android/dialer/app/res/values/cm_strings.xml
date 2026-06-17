@@ -39,6 +39,13 @@
     <string name="wb_amr_format" translatable="false">AMR-WB</string>
     <string name="aac_format" translatable="false">AAC</string>
 
+    <string name="call_recording_source_key" translatable="false">call_recording_source</string>
+    <string name="call_recording_source">Audio source</string>
+    <string name="source_mic">Microphone</string>
+    <string name="source_voice_uplink">Call (outgoing)</string>
+    <string name="source_voice_downlink">Call (incoming)</string>
+    <string name="source_voice_call">Call (incoming &amp; outgoing)</string>
+
     <string name="call_via">Call via</string>
     <string name="call_via_dialog_title">Call via\u2026</string>
 

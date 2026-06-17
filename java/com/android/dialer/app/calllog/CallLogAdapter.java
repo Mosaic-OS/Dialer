@@ -991,6 +991,22 @@ public class CallLogAdapter extends GroupingListAdapter
       views.quickContactView.setVisibility(View.VISIBLE);
     }
     callLogListItemHelper.setPhoneCallDetails(views, details);
+    
+    if (views.callDurationView != null) {
+      if (details.duration > 0 && 
+          details.callTypes[0] != CallLog.Calls.MISSED_TYPE && 
+          details.callTypes[0] != CallLog.Calls.REJECTED_TYPE) {
+        
+        String durationText = "\u2022 " + android.text.format.DateUtils.formatElapsedTime(details.duration);
+        
+        views.callDurationView.setText(durationText);
+        
+        views.callDurationView.setVisibility(View.VISIBLE);
+      } else {
+        views.callDurationView.setVisibility(View.GONE);
+      }
+    }
+    
     if (currentlyExpandedRowId == views.rowId) {
       // In case ViewHolders were added/removed, update the expanded position if the rowIds
       // match so that we can restore the correct expanded state on rebind.

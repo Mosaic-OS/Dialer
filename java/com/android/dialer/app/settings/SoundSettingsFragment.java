@@ -49,6 +49,12 @@ import com.android.dialer.R;
 import com.android.dialer.callrecord.impl.CallRecorderService;
 import com.android.dialer.util.SettingsUtil;
 
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+
+
 public class SoundSettingsFragment extends PreferenceFragmentCompat
     implements Preference.OnPreferenceChangeListener {
 
@@ -92,6 +98,7 @@ public class SoundSettingsFragment extends PreferenceFragmentCompat
   private SwitchPreferenceCompat playDtmfTone;
   private ListPreference dtmfToneLength;
   private SwitchPreferenceCompat enableDndInCall;
+  private Preference warningPref;
 
   private NotificationManager notificationManager;
 
@@ -112,7 +119,13 @@ public class SoundSettingsFragment extends PreferenceFragmentCompat
     addPreferencesFromResource(R.xml.sound_settings);
 
     Context context = getActivity();
-
+    warningPref = findPreference("call_recording_warning");
+    if (warningPref != null) {
+        warningPref.setOnPreferenceClickListener(preference -> {
+        showCallRecordingConsentDialogPlain();
+        return true;
+      });
+    }
     ringtonePreference = findPreference(context.getString(R.string.ringtone_preference_key));
     vibrateWhenRinging = findPreference(context.getString(R.string.vibrate_on_preference_key));
     playDtmfTone = findPreference(context.getString(R.string.play_dtmf_preference_key));
@@ -302,4 +315,22 @@ public class SoundSettingsFragment extends PreferenceFragmentCompat
         .getConfig()
         .getBoolean(CarrierConfigManager.KEY_HIDE_CARRIER_NETWORK_SETTINGS_BOOL);
   }
+  
+  // Show dialog for Callrecord consent
+  private void showCallRecordingConsentDialogPlain() {
+  Context ctx = requireContext();
+  View view = LayoutInflater.from(ctx).inflate(R.layout.dialog_call_recording_consent, null);
+  TextView tv = view.findViewById(R.id.consent_text);
+
+  tv.setText(getString(R.string.recording_consent));
+
+  tv.setTextSize(16);
+  tv.setLineSpacing(0f, 1.1f);
+  tv.setIncludeFontPadding(false);
+
+  new AlertDialog.Builder(ctx)
+      .setView(view)
+      .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
+      .show();
+    }
 }

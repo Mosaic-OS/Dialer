@@ -82,7 +82,19 @@ public class CallRecorderService extends Service {
   }
 
   private int getAudioSource() {
-    return getResources().getInteger(R.integer.call_recording_audio_source);
+    final String prefName = getPackageName() + "_preferences";
+    final SharedPreferences prefs = createDeviceProtectedStorageContext()
+            .getSharedPreferences(prefName, MODE_MULTI_PROCESS);
+
+    try {
+      String value = prefs.getString(getString(R.string.call_recording_source_key), null);
+      if (value != null) {
+        return Integer.parseInt(value);
+      }
+    } catch (NumberFormatException e) {
+      // ignore and fall through
+    }
+    return 0;
   }
 
   private int getAudioFormatChoice() {
@@ -105,74 +117,85 @@ public class CallRecorderService extends Service {
   }
 
   private synchronized boolean startRecordingInternal(String phoneNumber, long creationTime) {
-    if (mMediaRecorder != null) {
-      if (DBG) {
-        Log.d(TAG, "Start called with recording in progress, stopping  current recording");
+      if (mMediaRecorder != null) {
+          if (DBG) {
+            Log.d(TAG, "Start called with recording in progress, stopping  current recording");
+          }
+          stopRecordingInternal();
+        }
+
+        if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)
+            != PackageManager.PERMISSION_GRANTED) {
+          Log.w(TAG, "Record audio permission not granted, can't record call");
+          return false;
+        }
+
+        if (DBG) Log.d(TAG, "Starting recording");
+
+        mMediaRecorder = new MediaRecorder(getApplicationContext());
+        try {
+          int audioSource = getAudioSource();
+          int formatChoice = getAudioFormatChoice();
+          Log.i(TAG, "audioSource=" + audioSource + ", formatChoice=" + formatChoice);
+
+          mMediaRecorder.setAudioSource(audioSource);
+
+        if (formatChoice == 0) {
+        // AMR-WB
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.AMR_WB);
+        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB);
+        // Increase bitrate
+        mMediaRecorder.setAudioEncodingBitRate(23850);
+        } else {
+        // AAC in MPEG-4 container
+        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+        // Increase samping rate and bitrate
+        mMediaRecorder.setAudioSamplingRate(16000);
+        mMediaRecorder.setAudioEncodingBitRate(48000);
       }
-      stopRecordingInternal();
-    }
+        } catch (IllegalStateException e) {
+            Log.w(TAG, "Error initializing media recorder", e);
+            mMediaRecorder.reset();
+            mMediaRecorder.release();
+            mMediaRecorder = null;
+          return false;
+      }
 
-    if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO)
-        != PackageManager.PERMISSION_GRANTED) {
-      Log.w(TAG, "Record audio permission not granted, can't record call");
-      return false;
-    }
-
-    if (DBG) Log.d(TAG, "Starting recording");
-
-    mMediaRecorder = new MediaRecorder(getApplicationContext());
-    try {
-      int audioSource = getAudioSource();
-      int formatChoice = getAudioFormatChoice();
-      if (DBG) Log.d(TAG, "Creating media recorder with audio source " + audioSource);
-      mMediaRecorder.setAudioSource(audioSource);
-      mMediaRecorder.setOutputFormat(formatChoice == 0
-          ? MediaRecorder.OutputFormat.AMR_WB : MediaRecorder.OutputFormat.MPEG_4);
-      mMediaRecorder.setAudioEncoder(formatChoice == 0
-          ? MediaRecorder.AudioEncoder.AMR_WB : MediaRecorder.AudioEncoder.AAC);
-    } catch (IllegalStateException e) {
-      Log.w(TAG, "Error initializing media recorder", e);
-      mMediaRecorder.reset();
-      mMediaRecorder.release();
-      mMediaRecorder = null;
-      return false;
-    }
-
-    String fileName = generateFilename(phoneNumber);
-    Uri uri = getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+      String fileName = generateFilename(phoneNumber);
+      Uri uri = getContentResolver().insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             CallRecording.generateMediaInsertValues(fileName, creationTime));
 
-    try {
-      ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "w");
-      if (pfd == null) {
-        throw new IOException("Opening file for URI " + uri + " failed");
-      }
-      mMediaRecorder.setOutputFile(pfd.getFileDescriptor());
-      mMediaRecorder.prepare();
-      mMediaRecorder.start();
+      try {
+          ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "w");
+          if (pfd == null) {
+            throw new IOException("Opening file for URI " + uri + " failed");
+          }
+          mMediaRecorder.setOutputFile(pfd.getFileDescriptor());
+          mMediaRecorder.prepare();
+          mMediaRecorder.start();
 
-      long mediaId = Long.parseLong(uri.getLastPathSegment());
-      mCurrentRecording = new CallRecording(phoneNumber, creationTime,
-              fileName, System.currentTimeMillis(), mediaId);
-      return true;
-    } catch (IOException | IllegalStateException e) {
-      Log.w(TAG, "Could not start recording", e);
-      getContentResolver().delete(uri, null, null);
-    } catch (RuntimeException e) {
-      getContentResolver().delete(uri, null, null);
-      // only catch exceptions thrown by the MediaRecorder JNI code
-      if (e.getMessage().indexOf("start failed") >= 0) {
-        Log.w(TAG, "Could not start recording", e);
-      } else {
-        throw e;
-      }
-    }
+          long mediaId = Long.parseLong(uri.getLastPathSegment());
+          mCurrentRecording = new CallRecording(phoneNumber, creationTime,
+                fileName, System.currentTimeMillis(), mediaId);
+          return true;
+          } catch (IOException | IllegalStateException e) {
+              Log.w(TAG, "Could not start recording", e);
+              getContentResolver().delete(uri, null, null);
+          } catch (RuntimeException e) {
+              getContentResolver().delete(uri, null, null);
+              // only catch exceptions thrown by the MediaRecorder JNI code
+            if (e.getMessage().indexOf("start failed") >= 0) {
+                Log.w(TAG, "Could not start recording", e);
+            } else {
+                throw e;
+            }
+        }
 
-    mMediaRecorder.reset();
-    mMediaRecorder.release();
-    mMediaRecorder = null;
-
-    return false;
+        mMediaRecorder.reset();
+        mMediaRecorder.release();
+        mMediaRecorder = null;
+        return false;
   }
 
   private synchronized CallRecording stopRecordingInternal() {
@@ -216,6 +239,6 @@ public class CallRecorderService extends Service {
   }
 
   public static boolean isEnabled(Context context) {
-    return context.getResources().getBoolean(R.bool.call_recording_enabled);
+    return true;
   }
 }

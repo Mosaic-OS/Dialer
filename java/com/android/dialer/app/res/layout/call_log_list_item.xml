@@ -103,7 +103,7 @@
 
           <LinearLayout
             android:id="@+id/call_type"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -125,11 +125,20 @@
 
             <TextView
               android:id="@+id/call_location_and_date"
-              android:layout_width="wrap_content"
+              android:layout_width="0dp"
               android:layout_height="wrap_content"
+              android:layout_weight="1"
               android:layout_marginEnd="@dimen/call_log_icon_margin"
               android:layout_gravity="center_vertical"
-              style="Dialer.TextAppearance.Secondary.Ellipsize"/>
+              style="@style/Dialer.TextAppearance.Secondary.Ellipsize"/>
+            
+            <TextView
+              android:id="@+id/call_duration"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="8dp"
+              android:visibility="gone"
+              style="@style/Dialer.TextAppearance.Secondary" />
 
           </LinearLayout>
 

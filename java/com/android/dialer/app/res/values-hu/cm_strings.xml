@@ -28,6 +28,11 @@
     <string name="deny">Elutasítás</string>
     <string name="call_recording_category_title">Hívásrögzítés</string>
     <string name="call_recording_format">Hangformátum</string>
+    <string name="call_recording_source">Hangforrás</string>
+    <string name="source_mic">Mikrofon</string>
+    <string name="source_voice_uplink">Hívás (kimenő)</string>
+    <string name="source_voice_downlink">Hívás (bejövő)</string>
+    <string name="source_voice_call">Hívás (kimenő és bejövő)</string>
     <string name="call_via">Hívás a következővel</string>
     <string name="call_via_dialog_title">Hívás a következővel\u2026</string>
     <string name="call_log_stats_title">Statisztikák</string>

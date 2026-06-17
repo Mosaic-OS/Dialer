@@ -222,6 +222,8 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
 
   public CallLogAdapter.LoadDataTaskInterface asyncTask;
   private CallDetailsEntries callDetailsEntries;
+  
+  public final TextView callDurationView;
 
   private CallLogListItemViewHolder(
       Context context,
@@ -264,6 +266,7 @@ public final class CallLogListItemViewHolder extends RecyclerView.ViewHolder
     this.primaryActionButtonView = primaryActionButtonView;
     this.workIconView = rootView.findViewById(R.id.work_profile_icon);
     this.checkBoxView = rootView.findViewById(R.id.quick_contact_checkbox);
+    this.callDurationView = rootView.findViewById(R.id.call_duration);
 
     // Set text height to false on the TextViews so they don't have extra padding.
     phoneCallDetailsViews.nameView.setElegantTextHeight(false);

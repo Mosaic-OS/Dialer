@@ -1,0 +1,4 @@
+<resources>
+  <color name="search_text_color">#FFFFFF</color>
+  <color name="search_hint_color">#99FFFFFF</color>
+</resources>
